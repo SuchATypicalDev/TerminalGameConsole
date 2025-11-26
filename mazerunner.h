@@ -43,16 +43,17 @@ void init_mazerunner() {
     }
     std::cout << screen_buffer;
     auto t2 = std::chrono::high_resolution_clock::now();
-    int ms = (std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1)).count();
+    int ms = (std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1))
+                 .count();
     mslist.push_back(ms);
     float fps = (float)ms;
     int quit;
     std::cin >> quit;
-    if (quit>0) {
+    if (quit > 0) {
       for (int mis : mslist) {
         fps = ((float)(fps + mis)) / 2.0;
       }
-     fps = 1000.0/fps;
+      fps = 1000.0 / fps;
       std::cout << "\n" << fps;
       return;
     }
