@@ -1,6 +1,5 @@
-
-#ifndef GETTERM
-#define GETTERM
+#include "generalutils.hpp"
+#include<stdio.h>
 // copypasta from https://stackoverflow.com/a/62485211
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
@@ -10,6 +9,8 @@
 #include <sys/ioctl.h>
 #endif // Windows/Linux
 
+
+void Clear_Terminal(){printf("\033[H\033[J");}
 void get_terminal_size(int &width, int &height) {
 #if defined(_WIN32)
   CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -23,4 +24,3 @@ void get_terminal_size(int &width, int &height) {
   height = (int)(w.ws_row);
 #endif // Windows/Linux
 }
-#endif

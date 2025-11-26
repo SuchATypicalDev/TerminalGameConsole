@@ -1,4 +1,8 @@
-#include "includes.h"
+#include "mazerunner.hpp"
+#include <iostream>
+#include <vector>
+#include <chrono>
+#include "generalutils.hpp"
 void color_pixel(std::string &buffer, int r, int g, int b) {
 
   buffer += "\033[38;2;";
@@ -59,3 +63,4 @@ void init_mazerunner() {
     }
   }
 }
+

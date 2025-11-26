@@ -1,4 +1,6 @@
-#include "includes.h"
+#include "generalutils.hpp"
+#include "mazerunner.hpp" 
+#include <iostream>
 int main(int argc, char *argv[]) {
 	Clear_Terminal();
   int resx;
