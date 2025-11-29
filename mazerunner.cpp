@@ -85,15 +85,15 @@ void clear_buffer(std::string &screen_buffer) {
 } /////////////////////////////////////////////////////////////////////////////////////////
 std::vector<SH::square> generate_level(SH::vec2 &crystal) {
   std::vector<SH::square> sqlist;
-  int target = 3000;
+  int target = 5000;
   SH::vec2 origin(0.0, 0.0);
   srand(time(NULL));
   while (SH::distance(origin, crystal) < 100) {
-    crystal.x = rand() % 750 - 325;
-    crystal.y = rand() % 750 - 325;
+    crystal.x = rand() % 1000 - 500;
+    crystal.y = rand() % 1000 - 500;
   }
   for (int i = 0; i < target; i++) {
-    SH::vec2 sqpos(rand() % 750 - 325, rand() % 750 - 325);
+    SH::vec2 sqpos(rand() % 1000 - 500, rand() % 1000 - 500);
     for (SH::square square : sqlist) {
       if (SH::distance(square.position, sqpos) <= square.side_length) {
         target++;
@@ -183,7 +183,7 @@ void init_mazerunner() {
         std::chrono::duration_cast<std::chrono::milliseconds>(tl - tf).count();
     std::cout
         << "\033[38;2;200;125;125mDISTANCE TO CRYSTAL IS:"
-        << SH::distance(CENTER_PIXEL, crystal)
+        << SH::distance(CENTER_PIXEL, crystal) - 1.5 - sqsidelength / 2.0
         /*<< "\t\tNUMBER OF ITERATIONS PER FRAME:" << number_of_iterations*/
         << "\t\t MSPF:" << mspf << "\033[m\n";
     number_of_iterations = 0;
