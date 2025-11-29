@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "pong.hpp"
+
 using namespace std;
 // class PlayerScore
 //{
@@ -486,3 +487,4 @@ void init_pong()
     SDL_Quit();
 
 }
+
