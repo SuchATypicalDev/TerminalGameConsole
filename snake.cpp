@@ -1,8 +1,10 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_keycode.h>
 #include <vector>
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include "snake.hpp"
 using namespace std;
 // dinmensions of window
 const int ScreenWidth = 800;
@@ -40,7 +42,7 @@ void resetGame(vector<SnakeSegment>& snake, SDL_Rect& apple, vector<SDL_Rect>& w
     }
 }
 
-int main(int argc, char* argv[])
+void init_snake()
 {
     int score = 0;
     SDL_Init(SDL_INIT_VIDEO);
@@ -74,6 +76,7 @@ int main(int argc, char* argv[])
                 if (e.key.keysym.sym == SDLK_DOWN && dir != UP) dir = DOWN;
                 if (e.key.keysym.sym == SDLK_LEFT && dir != RIGHT) dir = LEFT;
                 if (e.key.keysym.sym == SDLK_RIGHT && dir != LEFT) dir = RIGHT;
+				if (e.key.keysym.sym == SDLK_ESCAPE) running = false;//added by SuchATypicalDev
             }
         }
 
@@ -152,5 +155,5 @@ int main(int argc, char* argv[])
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
-    return 0;
+    return ;
 }
