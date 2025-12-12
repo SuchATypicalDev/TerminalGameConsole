@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include <cstdio> 
-
+#include "Breakoutgame.hpp"
 // ثوابت الشاشة
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -49,8 +49,8 @@ void resetBall(Ball& ball) {
     ball.dy = BALL_SPEED_Y_INITIAL;
 }
 
-int main(int argc, char* argv[]) {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) return 1;
+void init_breakout() {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) return ;
 
     SDL_Window* window = SDL_CreateWindow("Breakout Game | Lives: 3", 
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
@@ -227,5 +227,5 @@ int main(int argc, char* argv[]) {
     SDL_DestroyWindow(window);
     SDL_Quit();
 
-    return 0;
+    return ;
 }
