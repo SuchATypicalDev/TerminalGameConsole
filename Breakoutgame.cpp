@@ -1,10 +1,10 @@
-// لعبة كسر الطوب بسيطة باستخدام SDL2
+
 #include <SDL2/SDL.h>
 #include <vector>
 #include <iostream>
 #include <cmath>
-#include <cstdio> // لاستخدام snprintf لتحديث عنوان النافذة
-#include "Breakoutgame.hpp"
+#include <cstdio> 
+
 // ثوابت الشاشة
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -12,14 +12,14 @@ const int SCREEN_HEIGHT = 600;
 // خصائص اللعبة
 const int PADDLE_WIDTH = 100;
 const int PADDLE_HEIGHT = 20;
-const int BALL_SIZE = 15;
+ int BALL_SIZE = 15;
 const int BRICK_WIDTH = 80;
 const int BRICK_HEIGHT = 30;
 const int BRICK_ROWS = 5;
 const int BRICK_COLS = 10;
 const float BALL_SPEED_Y_INITIAL = 250.0f; // السرعة الرأسية الأولية للكرة
 const float BALL_MAX_SPEED_X = 400.0f; // أقصى سرعة أفقية
-
+const float speed_of_paddle = 500.0f; // سرعة حركة المضرب
 // هياكل البيانات (Structs)
 struct Ball {
     float x, y;
@@ -27,7 +27,7 @@ struct Ball {
 };
 
 struct Paddle {
-    float x, y;
+    float x, y; 
     float speed;
 };
 
@@ -43,14 +43,14 @@ bool checkCollision(SDL_Rect a, SDL_Rect b) {
 
 // دالة لإعادة ضبط الكرة (عند الخسارة محاولة)
 void resetBall(Ball& ball) {
-    ball.x = (float)SCREEN_WIDTH / 2 - BALL_SIZE / 2;
+    ball.x = (float)SCREEN_WIDTH / 2-BALL_SIZE / 2;
     ball.y = (float)SCREEN_HEIGHT / 2;
     ball.dx = 0.0f;
     ball.dy = BALL_SPEED_Y_INITIAL;
 }
 
-void init_breakout() {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) return ;
+int main(int argc, char* argv[]) {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) return 1;
 
     SDL_Window* window = SDL_CreateWindow("Breakout Game | Lives: 3", 
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
@@ -65,37 +65,52 @@ void init_breakout() {
     int lives = 3;         // عدد المحاولات
 
     // إعداد الكائنات
-    Paddle paddle = { (float)(SCREEN_WIDTH - PADDLE_WIDTH) / 2, (float)(SCREEN_HEIGHT - 50), 500.0f };
+    Paddle paddle = { (float)(SCREEN_WIDTH - PADDLE_WIDTH) / 2, (float)(SCREEN_HEIGHT - 50),speed_of_paddle  };
     Ball ball;
     resetBall(ball); // إعداد الكرة الأولية
     
     std::vector<Brick> bricks;
-    int bricksCount = 0; // عداد الطوب الفعال
+    int activeBricksCount = 0; // عداد الطوب الفعال
 
     for (int i = 0; i < BRICK_ROWS; ++i) {
         for (int j = 0; j < BRICK_COLS; ++j) {
             Brick b;
             b.x = j * BRICK_WIDTH;
-            b.y = i * BRICK_HEIGHT + 50;
+            b.y = i * BRICK_HEIGHT + 50;// إزاحة الطوب للأسفل قليلاً 
             b.active = true;
             bricks.push_back(b);
-            bricksCount++;
+            activeBricksCount++;
         }
     }
 
-    Uint32 lastTime = SDL_GetTicks();
+    Uint32 lastTime = SDL_GetTicks(); // الوقت السابق للمساعدة في حساب deltaTime
 
     // حلقة اللعبة (Game Loop)
     while (running) {
         Uint32 currentTime = SDL_GetTicks();
-        float deltaTime = (currentTime - lastTime) / 1000.0f;
+        float deltaTime = (currentTime - lastTime) / 1000.0f; 
         lastTime = currentTime;
 
-        SDL_Event event;
+        SDL_Event event; 
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) running = false;
-            // يمكن إضافة زر لإعادة التشغيل هنا لو أردت
+    
+            if (event.type == SDL_KEYDOWN) {
+                if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+                    running = false; // الخروج عند الضغط على ESC
+                }
+                //sheeting size of ball
+                                if (event.key.keysym.scancode == SDL_SCANCODE_KP_PLUS ||
+                                     event.key.keysym.scancode == SDL_SCANCODE_EQUALS) {
+                    BALL_SIZE = std::min(455, BALL_SIZE + 10); // زيادة حجم الكرة مع الحد الأقصى
+                
+                }
+                if (event.key.keysym.scancode == SDL_SCANCODE_KP_MINUS ||
+                    event.key.keysym.scancode == SDL_SCANCODE_MINUS) { 
+                    BALL_SIZE = std::max(5, BALL_SIZE - 10); // تقليل حجم الكرة مع الحد الأدنى
+            }
         }
+    }
 
         const Uint8* state = SDL_GetKeyboardState(NULL);
 
@@ -130,12 +145,12 @@ void init_breakout() {
                 SDL_SetWindowTitle(window, "GAME OVER! (0 Lives) - Press ESC to exit");
             } else if (!gameWon) {
                 char titleBuffer[100];
-                snprintf(titleBuffer, sizeof(titleBuffer), "Breakout Game | Lives: %d | Bricks Left: %d", lives, bricksCount);
+                snprintf(titleBuffer, sizeof(titleBuffer), "Breakout Game | Lives: %d | Bricks Left: %d", lives, activeBricksCount);
                 SDL_SetWindowTitle(window, titleBuffer);
             }
 
 
-            SDL_Rect ballRect = { (int)ball.x, (int)ball.y, BALL_SIZE, BALL_SIZE };
+            SDL_Rect ballRect = { (int)ball.x, (int)ball.y, BALL_SIZE, BALL_SIZE }; 
             SDL_Rect paddleRect = { (int)paddle.x, (int)paddle.y, PADDLE_WIDTH, PADDLE_HEIGHT };
 
             // فيزياء ارتداد المضرب (تغيير الزاوية حسب مكان الضربة)
@@ -159,9 +174,8 @@ void init_breakout() {
                     if (checkCollision(ballRect, brickRect)) {
                         brick.active = false;
                         ball.dy = -ball.dy; // عكس اتجاه الكرة
-                        
-                        bricksCount--;
-                        if (bricksCount <= 0) {
+                        activeBricksCount--;
+                        if (activeBricksCount <= 0) {
                             gameWon = true;
                             SDL_SetWindowTitle(window, "YOU WON! GREAT JOB!");
                         }
@@ -180,7 +194,7 @@ void init_breakout() {
         } else {
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // أسود للوضع الطبيعي
         }
-        SDL_RenderClear(renderer);
+        SDL_RenderClear(renderer); 
 
         // رسم المضرب والكرة فقط إذا لم تكن اللعبة منتهية بالخسارة
         if (!gameOver) {
@@ -213,5 +227,5 @@ void init_breakout() {
     SDL_DestroyWindow(window);
     SDL_Quit();
 
-    return;
+    return 0;
 }
