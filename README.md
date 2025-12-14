@@ -14,7 +14,9 @@ the project currently only runs on linux based systems and only on some compatib
 below is a list of tested environments and operating systems for each game and for the whole project:
 
 entire project -> runs on wsl on an arch distro, requires SDL2 library to be installed
+
 tested and runs on an arch linux machine with the kitty terminal emulator.
+
 fails to run correctly on windows 10 command prompt or powershell, partially works on terminal emulators such as msys2 though results are not that good.
 
 pong -> compiles and runs on all platforms supported by SDL2, requires SDL2.
