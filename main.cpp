@@ -6,9 +6,6 @@
 #include <iostream>
 int main(int argc, char *argv[]) {
   Clear_Terminal();
-  int resx;
-  int resy;
-  get_terminal_size(resx, resy);
   bool running = true;
   while (running) {
     int game_id = 0;
@@ -47,7 +44,7 @@ int main(int argc, char *argv[]) {
       running = false;
       break;
     default:
-      system("clear");
+      Clear_Terminal();
       std::cout << "\033[38;2;255;0;0minvalid game, please try again\033[m\n";
     }
   }
