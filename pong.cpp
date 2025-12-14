@@ -1,60 +1,10 @@
 #include <chrono>
 #include <SDL2/SDL.h>
-//#include <SDL2/SDL_ttf.h>
 #include <iostream>
 #include <string>
 #include "pong.hpp"
 
 using namespace std;
-// class PlayerScore
-//{
-// public:
-// PlayerScore(Vec2 position, SDL_Renderer* renderer, TTF_Font* font)
-//	: renderer(renderer), font(font)
-//{
-//	surface = TTF_RenderText_Solid(font, "0", {0xFF, 0xFF, 0xFF, 0xFF});
-//	texture = SDL_CreateTextureFromSurface(renderer, surface);
-
-//	int width, height;
-// SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
-
-//	rect.x = static_cast<int>(position.x);
-// rect.y = static_cast<int>(position.y);
-// rect.w = width;
-// rect.h = height;
-//}
-// void SetScore(int score)
-//{
-//	SDL_FreeSurface(surface);
-//	SDL_DestroyTexture(texture);
-
-// surface = TTF_RenderText_Solid(font, std::to_string(score).c_str(), {0xFF, 0xFF, 0xFF, 0xFF});
-//	texture = SDL_CreateTextureFromSurface(renderer, surface);
-
-//	int width, height;
-//	SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
-//	rect.w = width;
-// rect.h = height;
-//}
-
-//~PlayerScore()
-//	{
-//	SDL_FreeSurface(surface);
-//	SDL_DestroyTexture(texture);
-//}
-
-// void Draw()
-//{
-//	SDL_RenderCopy(renderer, texture, nullptr, &rect);
-// }
-
-// SDL_Renderer* renderer;
-// TTF_Font* font;
-// SDL_Surface* surface{};
-// SDL_Texture* texture{};
-// SDL_Rect rect{};
-//}
-//;
 class Vec2
 {
 public:
@@ -316,15 +266,10 @@ void init_pong()
 {
 
     SDL_Init(SDL_INIT_VIDEO);
-    // TTF_Init();
 
     SDL_Window *window = SDL_CreateWindow("pong", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
-
-    //  TTF_Font *scoreFont = TTF_OpenFont("DejaVuSansMono.ttf", 40);
-    // PlayerScore playerOneScoreText(Vec2(WINDOW_WIDTH / 4, 20), renderer, scoreFont, scoreColor);
-    // PlayerScore playerTwoScoreText(Vec2(3 * WINDOW_WIDTH / 4, 20), renderer, scoreFont, scoreColor);
-    ball ball(
+   ball ball(
         Vec2((1280 / 2.0f) - (BallWidth / 2.0f),
              (720 / 2.0f) - (BallWidth / 2.0f)),
         Vec2(BallSpeed, 0.0f));
@@ -445,19 +390,7 @@ void init_pong()
                      contact.type != CollisionType::None)
             {
                 ball.CollideWithWall(contact);
-                //  if (contact.type == CollisionType::Left)
-                //{
-                //++playerTwoScore;
-
-                // playerTwoScoreText.SetScore(playerTwoScore);
-                //}
-                // else if (contact.type == CollisionType::Right)
-                //{
-                //++playerOneScore;
-
-                // playerOneScoreText.SetScore(playerOneScore);
-                //}
-            }
+           }
             SDL_SetRenderDrawColor(renderer, 0x0, 0x0, 0x0, 0xFF);
             SDL_RenderClear(renderer);
 
@@ -482,8 +415,6 @@ void init_pong()
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    // TTF_CloseFont(scoreFont);
-    // TTF_QUIT;
     SDL_Quit();
 
 }
